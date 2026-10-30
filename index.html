@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="ur" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#123047">
+<meta name="description" content="MS اور Stainless Steel شیٹ کا وزن معلوم کرنے کا آسان کیلکولیٹر">
+<link rel="manifest" href="manifest.json">
+<title>Sheet Weight Calculator</title>
+<style>
+:root{--navy:#123047;--teal:#087e8b;--bg:#f3f6f8;--ink:#172b3a;--muted:#647584;--line:#dce5ea;--white:#fff}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Noto Naskh Arabic","Noto Sans Arabic",sans-serif}
+header{background:var(--navy);color:#fff;padding:24px 20px 28px;border-radius:0 0 24px 24px}
+header .en{direction:ltr;text-align:left;font-size:12px;letter-spacing:1.5px;opacity:.8}
+h1{font-size:23px;margin:7px 0 4px}
+header p{margin:0;font-size:13px;opacity:.82}
+main{max-width:520px;margin:-12px auto 0;padding:0 14px 28px}
+.panel{background:#fff;border:1px solid var(--line);border-radius:18px;padding:18px;margin-bottom:14px;box-shadow:0 5px 18px #1230470a}
+label{display:block;font-size:14px;font-weight:650;margin:0 0 7px}
+.field{margin-bottom:16px}
+select,input{width:100%;font:inherit;font-size:16px;padding:13px 12px;border:1px solid #cbd8df;border-radius:11px;background:#fff;color:var(--ink);outline:none}
+select:focus,input:focus{border-color:var(--teal);box-shadow:0 0 0 3px #087e8b1b}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.result{background:var(--navy);color:#fff;border-radius:17px;padding:18px;margin-bottom:14px}
+.result .small{font-size:13px;opacity:.78}
+.result .big{font-size:32px;font-weight:800;direction:ltr;text-align:right;line-height:1.35;overflow-wrap:anywhere}
+.result .unit{font-size:15px;font-weight:600}
+.result hr{border:0;border-top:1px solid #ffffff2e;margin:14px 0}
+.result-row{display:flex;justify-content:space-between;align-items:center;gap:10px;margin:8px 0;font-size:14px}
+.result-row strong{direction:ltr}
+button{width:100%;border:0;border-radius:12px;padding:13px;font:inherit;font-weight:700;background:var(--teal);color:white;font-size:16px}
+button:active{transform:scale(.99)}
+.note{font-size:12px;color:var(--muted);line-height:1.7;margin:10px 2px 0}
+.pill{display:inline-block;background:#e6f4f4;color:#08636c;border-radius:20px;padding:4px 9px;font-size:11px;font-weight:700}
+footer{text-align:center;color:var(--muted);font-size:11px;padding:2px 20px 18px}
+@media(min-width:520px){header{border-radius:0 0 28px 28px}main{padding-left:18px;padding-right:18px}}
+</style>
+</head>
+<body>
+<header>
+  <div class="en">SHEET WEIGHT</div>
+  <h1>شیٹ ویٹ کیلکولیٹر</h1>
+  <p>MS اور Stainless Steel شیٹ کا وزن فوراً معلوم کریں</p>
+</header>
+<main>
+  <section class="panel">
+    <div class="field">
+      <label for="material">میٹیریل منتخب کریں</label>
+      <select id="material">
+        <option value="MS">MS — Mild Steel</option>
+        <option value="SS304">Stainless Steel 304</option>
+        <option value="SS316">Stainless Steel 316</option>
+        <option value="SS430">Stainless Steel 430</option>
+      </select>
+    </div>
+    <div class="grid">
+      <div class="field">
+        <label for="thickness">موٹائی (mm)</label>
+        <input id="thickness" type="number" min="0" step="any" value="2" inputmode="decimal">
+      </div>
+      <div class="field">
+        <label for="area">رقبہ (مربع فٹ)</label>
+        <input id="area" type="number" min="0" step="any" value="25" inputmode="decimal">
+      </div>
+    </div>
+    <div class="field" style="margin-bottom:0">
+      <label for="count">شیٹس کی تعداد</label>
+      <input id="count" type="number" min="1" step="1" value="1" inputmode="numeric">
+    </div>
+  </section>
+
+  <section class="result" aria-live="polite">
+    <div class="small">تمام شیٹس کا مجموعی وزن</div>
+    <div class="big"><span id="total">36.465</span> <span class="unit">kg</span></div>
+    <hr>
+    <div class="result-row"><span>ایک شیٹ کا وزن</span><strong><span id="one">36.465</span> kg</strong></div>
+    <div class="result-row"><span>فی مربع فٹ وزن</span><strong><span id="per">1.459</span> kg</strong></div>
+    <div class="result-row"><span>منتخب میٹیریل</span><span class="pill" id="grade">MS</span></div>
+  </section>
+
+  <section class="panel">
+    <button id="reset" type="button">ڈیفالٹ اعداد بحال کریں</button>
+    <p class="note">فارمولا: رقبہ (ft²) × موٹائی (mm) × میٹیریل فیکٹر۔ نتیجہ نظریاتی وزن ہے؛ اصل وزن میں گریڈ، حقیقی موٹائی اور مینوفیکچرنگ ٹالرنس کے باعث معمولی فرق ہو سکتا ہے۔</p>
+  </section>
+</main>
+<footer>Offline calculation • No ads • No account required</footer>
+<script>
+const factors = {MS:0.7293, SS304:0.7432, SS316:0.7432, SS430:0.7154};
+const material = document.getElementById('material');
+const thickness = document.getElementById('thickness');
+const area = document.getElementById('area');
+const count = document.getElementById('count');
+const fmt = n => Number.isFinite(n) ? n.toLocaleString('en-US',{minimumFractionDigits:3,maximumFractionDigits:3}) : '—';
+function calc(){
+  const t = Math.max(0, Number(thickness.value)||0);
+  const a = Math.max(0, Number(area.value)||0);
+  const c = Math.max(0, Math.floor(Number(count.value)||0));
+  const f = factors[material.value] || factors.MS;
+  const per = t*f, one = per*a, total = one*c;
+  document.getElementById('per').textContent = fmt(per);
+  document.getElementById('one').textContent = fmt(one);
+  document.getElementById('total').textContent = fmt(total);
+  document.getElementById('grade').textContent = material.options[material.selectedIndex].text;
+}
+[material,thickness,area,count].forEach(el=>el.addEventListener('input',calc));
+document.getElementById('reset').addEventListener('click',()=>{
+ material.value='MS'; thickness.value='2'; area.value='25'; count.value='1'; calc();
+});
+calc();
+if ('serviceWorker' in navigator && location.protocol.startsWith('http')) {
+ window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));
+}
+</script>
+</body>
+</html>

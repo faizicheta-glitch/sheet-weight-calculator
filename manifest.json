@@ -1,0 +1,12 @@
+{
+  "name": "Sheet Weight Calculator",
+  "short_name": "Sheet Weight",
+  "description": "MS اور Stainless Steel شیٹ کا وزن کیلکولیٹر",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#f3f6f8",
+  "theme_color": "#123047",
+  "lang": "ur",
+  "dir": "rtl",
+  "icons": []
+}
