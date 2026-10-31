@@ -1,12 +1,14 @@
+
 <!doctype html>
 <html lang="ur" dir="rtl">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#123047">
-<meta name="description" content="MS اور Stainless Steel شیٹ کا وزن معلوم کرنے کا آسان کیلکولیٹر">
+<meta name="description" content="Sheet Weight Calculator By Faisal — MS اور Stainless Steel شیٹ کا وزن اور قیمت معلوم کریں۔">
 <link rel="manifest" href="manifest.json">
-<title>Sheet Weight Calculator</title>
+<title>Sheet Weight Calculator By Faisal</title>
+
 <style>
 :root{--navy:#123047;--teal:#087e8b;--bg:#f3f6f8;--ink:#172b3a;--muted:#647584;--line:#dce5ea;--white:#fff}
 *{box-sizing:border-box}
@@ -27,8 +29,9 @@ select:focus,input:focus{border-color:var(--teal);box-shadow:0 0 0 3px #087e8b1b
 .result .big{font-size:32px;font-weight:800;direction:ltr;text-align:right;line-height:1.35;overflow-wrap:anywhere}
 .result .unit{font-size:15px;font-weight:600}
 .result hr{border:0;border-top:1px solid #ffffff2e;margin:14px 0}
-.result-row{display:flex;justify-content:space-between;align-items:center;gap:10px;margin:8px 0;font-size:14px}
-.result-row strong{direction:ltr}
+.result-row{display:flex;justify-content:space-between;align-items:center;gap:10px;margin:10px 0;font-size:14px}
+.result-row strong{direction:ltr;text-align:left;overflow-wrap:anywhere}
+.price{color:#a8f0d0}
 button{width:100%;border:0;border-radius:12px;padding:13px;font:inherit;font-weight:700;background:var(--teal);color:white;font-size:16px}
 button:active{transform:scale(.99)}
 .note{font-size:12px;color:var(--muted);line-height:1.7;margin:10px 2px 0}
@@ -37,12 +40,14 @@ footer{text-align:center;color:var(--muted);font-size:11px;padding:2px 20px 18px
 @media(min-width:520px){header{border-radius:0 0 28px 28px}main{padding-left:18px;padding-right:18px}}
 </style>
 </head>
+
 <body>
 <header>
   <div class="en">SHEET WEIGHT BY FAISAL</div>
   <h1>فیصل شیٹ ویٹ کیلکولیٹر</h1>
-  <p>MS اور Stainless Steel شیٹ کا وزن فوراً معلوم کریں</p>
+  <p>MS اور Stainless Steel شیٹ کا وزن اور قیمت معلوم کریں</p>
 </header>
+
 <main>
   <section class="panel">
     <div class="field">
@@ -54,62 +59,159 @@ footer{text-align:center;color:var(--muted);font-size:11px;padding:2px 20px 18px
         <option value="SS430">Stainless Steel 430</option>
       </select>
     </div>
+
     <div class="grid">
       <div class="field">
         <label for="thickness">موٹائی (mm)</label>
         <input id="thickness" type="number" min="0" step="any" value="2" inputmode="decimal">
       </div>
+
       <div class="field">
         <label for="area">رقبہ (مربع فٹ)</label>
         <input id="area" type="number" min="0" step="any" value="25" inputmode="decimal">
       </div>
     </div>
-    <div class="field" style="margin-bottom:0">
+
+    <div class="field">
       <label for="count">شیٹس کی تعداد</label>
       <input id="count" type="number" min="1" step="1" value="1" inputmode="numeric">
+    </div>
+
+    <div class="field" style="margin-bottom:0">
+      <label for="rate">فی کلو ریٹ (روپے)</label>
+      <input id="rate" type="number" min="0" step="any" value="0"
+             inputmode="decimal" placeholder="مثلاً 250">
     </div>
   </section>
 
   <section class="result" aria-live="polite">
     <div class="small">تمام شیٹس کا مجموعی وزن</div>
     <div class="big"><span id="total">36.465</span> <span class="unit">kg</span></div>
+
     <hr>
-    <div class="result-row"><span>ایک شیٹ کا وزن</span><strong><span id="one">36.465</span> kg</strong></div>
-    <div class="result-row"><span>فی مربع فٹ وزن</span><strong><span id="per">1.459</span> kg</strong></div>
-    <div class="result-row"><span>منتخب میٹیریل</span><span class="pill" id="grade">MS</span></div>
+
+    <div class="result-row">
+      <span>ایک شیٹ کا وزن</span>
+      <strong><span id="one">36.465</span> kg</strong>
+    </div>
+
+    <div class="result-row">
+      <span>فی مربع فٹ وزن</span>
+      <strong><span id="per">1.459</span> kg</strong>
+    </div>
+
+    <div class="result-row">
+      <span>منتخب میٹیریل</span>
+      <span class="pill" id="grade">MS</span>
+    </div>
+
+    <hr>
+
+    <div class="small">قیمت کا حساب</div>
+
+    <div class="result-row">
+      <span>فی کلو ریٹ</span>
+      <strong>Rs <span id="rateDisplay">0.00</span></strong>
+    </div>
+
+    <div class="result-row">
+      <span>ایک شیٹ کی قیمت</span>
+      <strong class="price">Rs <span id="oneCost">0.00</span></strong>
+    </div>
+
+    <div class="result-row">
+      <span>تمام شیٹس کی قیمت</span>
+      <strong class="price">Rs <span id="totalCost">0.00</span></strong>
+    </div>
   </section>
 
   <section class="panel">
     <button id="reset" type="button">ڈیفالٹ اعداد بحال کریں</button>
-    <p class="note">فارمولا: رقبہ (ft²) × موٹائی (mm) × میٹیریل فیکٹر۔ نتیجہ نظریاتی وزن ہے؛ اصل وزن میں گریڈ، حقیقی موٹائی اور مینوفیکچرنگ ٹالرنس کے باعث معمولی فرق ہو سکتا ہے۔</p>
+    <p class="note">
+      وزن کا فارمولا: رقبہ (ft²) × موٹائی (mm) × میٹیریل فیکٹر۔
+      قیمت = وزن (kg) × فی کلو ریٹ۔
+      نتیجہ نظریاتی وزن ہے؛ اصل وزن میں گریڈ، حقیقی موٹائی اور
+      مینوفیکچرنگ ٹالرنس کے باعث معمولی فرق ہو سکتا ہے۔
+    </p>
   </section>
 </main>
+
 <footer>Offline calculation BY FAISAL • No ads • No account required</footer>
+
 <script>
-const factors = {MS:0.7293, SS304:0.7432, SS316:0.7432, SS430:0.7154};
+const factors = {
+  MS: 0.7293,
+  SS304: 0.7432,
+  SS316: 0.7432,
+  SS430: 0.7154
+};
+
 const material = document.getElementById('material');
 const thickness = document.getElementById('thickness');
 const area = document.getElementById('area');
 const count = document.getElementById('count');
-const fmt = n => Number.isFinite(n) ? n.toLocaleString('en-US',{minimumFractionDigits:3,maximumFractionDigits:3}) : '—';
-function calc(){
-  const t = Math.max(0, Number(thickness.value)||0);
-  const a = Math.max(0, Number(area.value)||0);
-  const c = Math.max(0, Math.floor(Number(count.value)||0));
+const rate = document.getElementById('rate');
+
+const fmt = n => Number.isFinite(n)
+  ? n.toLocaleString('en-US', {
+      minimumFractionDigits: 3,
+      maximumFractionDigits: 3
+    })
+  : '—';
+
+const money = n => Number.isFinite(n)
+  ? n.toLocaleString('en-US', {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2
+    })
+  : '—';
+
+function calc() {
+  const t = Math.max(0, Number(thickness.value) || 0);
+  const a = Math.max(0, Number(area.value) || 0);
+  const c = Math.max(0, Math.floor(Number(count.value) || 0));
+  const r = Math.max(0, Number(rate.value) || 0);
   const f = factors[material.value] || factors.MS;
-  const per = t*f, one = per*a, total = one*c;
+
+  const per = t * f;
+  const one = per * a;
+  const total = one * c;
+
+  const oneCost = one * r;
+  const totalCost = total * r;
+
   document.getElementById('per').textContent = fmt(per);
   document.getElementById('one').textContent = fmt(one);
   document.getElementById('total').textContent = fmt(total);
-  document.getElementById('grade').textContent = material.options[material.selectedIndex].text;
+
+  document.getElementById('grade').textContent =
+    material.options[material.selectedIndex].text;
+
+  document.getElementById('rateDisplay').textContent = money(r);
+  document.getElementById('oneCost').textContent = money(oneCost);
+  document.getElementById('totalCost').textContent = money(totalCost);
 }
-[material,thickness,area,count].forEach(el=>el.addEventListener('input',calc));
-document.getElementById('reset').addEventListener('click',()=>{
- material.value='MS'; thickness.value='2'; area.value='25'; count.value='1'; calc();
+
+[material, thickness, area, count, rate].forEach(el => {
+  el.addEventListener('input', calc);
+  el.addEventListener('change', calc);
 });
+
+document.getElementById('reset').addEventListener('click', () => {
+  material.value = 'MS';
+  thickness.value = '2';
+  area.value = '25';
+  count.value = '1';
+  rate.value = '0';
+  calc();
+});
+
 calc();
+
 if ('serviceWorker' in navigator && location.protocol.startsWith('http')) {
- window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./sw.js').catch(() => {});
+  });
 }
 </script>
 </body>
